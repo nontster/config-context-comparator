@@ -1,0 +1,129 @@
+{
+  "name": "config-context-comparator",
+  "displayName": "Config Context Comparator",
+  "description": "Compare configuration files (YAML, JSON, TOML, INI, XML, Properties) structurally to detect missing keys and mismatches across environments.",
+  "version": "0.1.0",
+  "publisher": "nontster",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nontster/config-context-comparator"
+  },
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Other",
+    "Linters"
+  ],
+  "keywords": [
+    "config",
+    "configuration",
+    "compare",
+    "diff",
+    "yaml",
+    "json",
+    "toml",
+    "environment",
+    "uat",
+    "production"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "config-comparator.compareFiles",
+        "title": "Compare Config Files",
+        "category": "Config Comparator",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "config-comparator.quickCompare",
+        "title": "Compare with...",
+        "category": "Config Comparator",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "config-comparator.clearComparison",
+        "title": "Clear Comparison",
+        "category": "Config Comparator",
+        "icon": "$(clear-all)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "configComparison",
+          "name": "Config Comparison",
+          "icon": "$(diff)",
+          "contextualTitle": "Config Comparison Results"
+        }
+      ]
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "config-comparator.quickCompare",
+          "when": "resourceExtname =~ /\\.(json|yaml|yml|toml|ini|xml|properties)$/",
+          "group": "3_compare@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "config-comparator.compareFiles",
+          "when": "view == configComparison",
+          "group": "navigation@1"
+        },
+        {
+          "command": "config-comparator.clearComparison",
+          "when": "view == configComparison",
+          "group": "navigation@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "config-comparator.compareFiles",
+          "when": "true"
+        },
+        {
+          "command": "config-comparator.quickCompare",
+          "when": "false"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "yaml": "^2.7.1",
+    "@iarna/toml": "^2.2.5",
+    "ini": "^5.0.0",
+    "fast-xml-parser": "^5.2.3"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.107.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/ini": "^4.1.1",
+    "typescript-eslint": "^8.48.1",
+    "eslint": "^9.39.1",
+    "esbuild": "^0.27.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
